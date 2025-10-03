@@ -1,0 +1,49 @@
+name: CodeQL
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "0 6 * * 1" # semanal (segunda 06:00 UTC)
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: CodeQL (JavaScript/TypeScript)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps
+        working-directory: app
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm i; fi
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+          # Para ampliar cobertura, descomente:
+          # queries: +security-extended
+
+      # Como é JS/Node, o autobuild geralmente basta
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript"
