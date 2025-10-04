@@ -1,12 +1,10 @@
 name: CodeQL
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  push: { branches: ["main"] }
+  pull_request: { branches: ["main"] }
   schedule:
-    - cron: "0 6 * * 1" # semanal (segunda 06:00 UTC)
+    - cron: "0 6 * * 1"
 
 permissions:
   contents: read
@@ -14,32 +12,26 @@ permissions:
 
 jobs:
   analyze:
-    name: CodeQL (JavaScript/TypeScript)
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
-      - name: Install deps
-        working-directory: app
-        run: |
-          if [ -f package-lock.json ]; then npm ci; else npm i; fi
+      # instala no ROOT (workspace). O lockfile DA RAIZ resolve a exigência do CodeQL
+      - name: Install deps (workspace root)
+        run: npm ci
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: javascript
-          # Para ampliar cobertura, descomente:
-          # queries: +security-extended
+          config-file: ./.github/codeql/codeql-config.yml
+          # queries: +security-extended,+security-and-quality  # opcional
 
-      # Como é JS/Node, o autobuild geralmente basta
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
 

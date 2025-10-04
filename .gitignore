@@ -1,0 +1,49 @@
+# --- Node modules (raiz e subpastas)
+node_modules/
+**/node_modules/
+
+# --- Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --- Caches/outputs
+.dist/
+dist/
+build/
+coverage/
+.nyc_output/
+.cache/
+.vite/
+.next/
+out/
+.tmp/
+temp/
+tmp/
+
+# --- Env / secrets (mantenha .env.example)
+.env
+.env.*
+!.env.example
+
+# --- OS/Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# --- TypeScript / tooling
+*.tsbuildinfo
+
+# --- CodeQL (artefatos locais)
+.codeql/
+codeql-db/
+codeql-databases/
+
+# --- Misc
+*.swp
+*.swo
